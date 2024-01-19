@@ -8,6 +8,7 @@
 - Gradle
 - MariaDB
 - Elastic Search
+- Docker
 
 ## Model 설명
 
@@ -31,9 +32,6 @@
 
 - ChatRoom : 채팅창 (상점끼리 메시지)
     - id, 판매상점(Store), 구매상점(Store)
-
-- Participant : 채팅방에 참여하는 상점
-    - id, 상점(Store), 채팅방(ChatRoom)
 
 - ChatMessage : 채팅내용 (채팅 메시지내용)
     - id, 보내는상점(Store), 채팅내용, 채팅창(ChatRoom), 전송시간
