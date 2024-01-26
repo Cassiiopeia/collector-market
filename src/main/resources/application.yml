@@ -1,0 +1,55 @@
+server:
+  shutdown: graceful
+  port: 8085
+
+spring:
+
+  mvc:
+    path match:
+      matching-strategy: ant_path_matcher
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${MAIL_USERNAME}
+#    password: ${MAIL_PASSWORD}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#    default-encoding: UTF-8
+#
+#  security:
+#    jwt:
+#      secret: ${JWT_SECRET}
+#      expire: ${JWT_EXPIRE} # 3hour
+
+domain:
+  address: localhost
+
+#springdoc:
+#  default-consumes-media-type: application/json;charset=UTF-8
+#  default-produces-media-type: application/json;charset=UTF-8
+#  swagger-ui:
+#    path: /docs/swagger
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: INFO
+#    org.springframework.security: DEBUG
