@@ -32,24 +32,23 @@ spring:
 #          starttls:
 #            enable: true
 #    default-encoding: UTF-8
-#
-#  security:
-#    jwt:
-#      secret: ${JWT_SECRET}
-#      expire: ${JWT_EXPIRE} # 3hour
+
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+      expire: ${JWT_EXPIRE} # 3hour
 
 domain:
   address: localhost
 
-#springdoc:
-#  default-consumes-media-type: application/json;charset=UTF-8
-#  default-produces-media-type: application/json;charset=UTF-8
-#  swagger-ui:
-#    path: /docs/swagger
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /docs/swagger
 
 logging:
   level:
-    root: INFO
     org.springframework.web: INFO
     org.hibernate.SQL: INFO
-#    org.springframework.security: DEBUG
+    org.springframework.security: DEBUG
