@@ -1,0 +1,21 @@
+### 회원가입
+POST http://localhost:8085/member/signup
+Content-Type: application/json
+
+{
+  "name": "suhsaeechan",
+  "email": "chan4760@naver.com",
+  "password": "chan4760@",
+  "phone": "01066667777"
+}
+
+### 로그인
+POST http://localhost:8085/member/signin
+Content-Type: application/json
+
+{
+  "email": "chan4760@naver.com",
+  "password": "chan4760@"
+}
+
+### token : 토큰정보 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2MzQ2ODEwLCJleHAiOjE3MDYzNTc2MTB9.WUQBAkeNt5nWM8kuRJTwNQemVSR6_tCyZhK-aHtbH6Y

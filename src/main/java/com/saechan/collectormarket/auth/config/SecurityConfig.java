@@ -37,7 +37,10 @@ public class SecurityConfig {
             // 모두 허용
             .requestMatchers(
                 "/docs/**", // swagger
-                "/v3/api-docs/**" // swagger
+                "/v3/api-docs/**", // swagger
+                "/member/signup", // 회원가입
+                "/member/email-auth/**", // 이메일 인증
+                "/member/signin" // 로그인 경로 허용
             ).permitAll()
             // 고객만 허용
             .requestMatchers(HttpMethod.GET, "/member/profile").hasRole("USER")
