@@ -43,7 +43,7 @@ public class MemberDto {
         .emailAuthCode(member.getEmailAuthCode())
         .emailAuthCreateDt(member.getEmailAuthCreateDt())
         .activated(member.getActivated())
-        .storeId(member.getStore() == null ? -1 : member.getStore().getId())
+        .storeId(Member.getStoreId(member))
         .build();
   }
 

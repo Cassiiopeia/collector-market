@@ -3,7 +3,6 @@ package com.saechan.collectormarket.member.controller;
 import com.saechan.collectormarket.member.dto.request.MemberSignInForm;
 import com.saechan.collectormarket.member.dto.request.MemberSignUpForm;
 import com.saechan.collectormarket.member.dto.response.MemberDto;
-import com.saechan.collectormarket.member.model.entity.Member;
 import com.saechan.collectormarket.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,8 @@ public class MemberController {
   public ResponseEntity<MemberDto> signUp(
       @RequestBody MemberSignUpForm form
   ){
-    Member member = memberService.signUp(form);
-    return ResponseEntity.ok(MemberDto.from(member));
+    MemberDto memberDto = memberService.signUp(form);
+    return ResponseEntity.ok(memberDto);
   }
 
   @GetMapping("/email-auth")

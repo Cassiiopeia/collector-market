@@ -4,7 +4,6 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -25,15 +24,6 @@ public class MailService {
   String port;
 
   private final String EMAIL_AUTH_ADDRESS = "/member/email-auth";
-
-  public void sendTestMail() {
-    SimpleMailMessage msg = new SimpleMailMessage();
-    msg.setTo("chan4760@naver.com");
-    msg.setSubject("중고거래 시스템: 테스트 메일");
-    msg.setText("중고거래 시스템: 테스트 본문");
-    javaMailSender.send(msg);
-  }
-
   public void sendMail(String email, String subject, String text) {
     MimeMessagePreparator msg = new MimeMessagePreparator() {
       @Override

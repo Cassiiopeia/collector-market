@@ -4,6 +4,7 @@ import com.saechan.collectormarket.auth.jwt.JwtTokenProvider;
 import com.saechan.collectormarket.auth.service.MailService;
 import com.saechan.collectormarket.member.dto.request.MemberSignInForm;
 import com.saechan.collectormarket.member.dto.request.MemberSignUpForm;
+import com.saechan.collectormarket.member.dto.response.MemberDto;
 import com.saechan.collectormarket.member.exception.MemberException;
 import com.saechan.collectormarket.global.excpetion.ErrorCode;
 import com.saechan.collectormarket.member.model.entity.Member;
@@ -11,12 +12,12 @@ import com.saechan.collectormarket.member.model.repository.MemberRepository;
 import com.saechan.collectormarket.member.model.type.UserRole;
 import com.saechan.collectormarket.store.service.StoreService;
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -24,61 +25,60 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
   private final MemberRepository memberRepository;
-
   private final MailService mailService;
   private final StoreService storeService;
 
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
 
-  public Member signUp(MemberSignUpForm form) {
+  private final static int EMAIL_CERTIFICATION_EXPIRE_MINUTES = 30;
+
+  public MemberDto signUp(MemberSignUpForm form) {
 
     // 형식 검증
     form.validate();
 
-    // 이메일로 회원 검색
-    Optional<Member> existMember = memberRepository.findByEmail(
-        form.getEmail());
+    return memberRepository.findByEmail(form.getEmail()).map(existMember -> {
+      if (!existMember.getActivated()) {
+        // 비활성화된 회원인 경우 (활성화 이메일 발송)
+        String emailAuthCode = UUID.randomUUID().toString().replaceAll("-", "");
+        mailService.sendEmailAuth(form.getEmail(), emailAuthCode);
 
-    // 활성화된 이메일이 존재한 경우
-    if (existMember.isPresent() && existMember.get().getActivated()) {
-      throw new MemberException(ErrorCode.ALREADY_EXIST_EMAIL);
-    }
+        return MemberDto.from(existMember);
+      } else {
+        // 이메일이 존재하는경우
+        throw new MemberException(ErrorCode.ALREADY_EXIST_EMAIL);
+      }
+    }).orElseGet(() -> {
+      // 신규 회원인 경우
 
-    // 비활성화된 이메일이 존재한 경우
-    if (existMember.isPresent() && !existMember.get().getActivated()) {
+      // 이메일 인증코드 생성 및 메일 전송
       String emailAuthCode = UUID.randomUUID().toString().replaceAll("-", "");
       mailService.sendEmailAuth(form.getEmail(), emailAuthCode);
-      return existMember.get();
-    }
 
-    // 이메일 인증코드 생성
-    String emailAuthCode = UUID.randomUUID().toString().replaceAll("-", "");
-    mailService.sendEmailAuth(form.getEmail(), emailAuthCode);
+      // 비밀번호 암호화
+      String encodedPassword = passwordEncoder.encode(form.getPassword());
 
-    // 비밀번호 암호화
-    String encodedPassword = passwordEncoder.encode(form.getPassword());
+      // 회원 생성
+      Member signUpMember = Member.builder()
+          .email(form.getEmail())
+          .password(encodedPassword)
+          .name(form.getName())
+          .phone(form.getPhone())
+          .point((double) 0)
+          .role(UserRole.ROLE_USER)
+          .emailAuthCode(emailAuthCode)
+          .emailAuthCreateDt(LocalDateTime.now())
+          .activated(false)
+          .store(null)
+          .build();
 
-    // 회원 생성
-    Member signUpMember = Member.builder()
-        .email(form.getEmail())
-        .password(encodedPassword)
-        .name(form.getName())
-        .phone(form.getPhone())
-        .point((double) 0)
-        .role(UserRole.ROLE_USER)
-        .emailAuthCode(emailAuthCode)
-        .emailAuthCreateDt(LocalDateTime.now())
-        .activated(false)
-        .store(null)
-        .build();
-
-    // 회원 저장
-    memberRepository.save(signUpMember);
-
-    return signUpMember;
+      // 회원 저장
+      return MemberDto.from(memberRepository.save(signUpMember));
+    });
   }
 
+  @Transactional
   public void proceedEmailAuth(String emailAuthCode) {
     // 이메일코드로 회원 검색
     Member member = memberRepository.findByEmailAuthCode(emailAuthCode)
@@ -86,7 +86,7 @@ public class MemberService {
             () -> new MemberException(ErrorCode.INVALID_EMAIL_AUTH_CODE));
 
     // 인증 만료 시간 (30분) 유효 확인
-    if (member.getEmailAuthCreateDt().plusMinutes(30)
+    if (member.getEmailAuthCreateDt().plusMinutes(EMAIL_CERTIFICATION_EXPIRE_MINUTES)
         .isBefore(LocalDateTime.now())) {
       throw new MemberException(ErrorCode.EXPIRED_EMAIL_AUTH_CODE);
     }

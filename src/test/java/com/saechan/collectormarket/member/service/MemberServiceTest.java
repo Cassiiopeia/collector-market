@@ -12,6 +12,7 @@ import com.saechan.collectormarket.auth.service.MailService;
 import com.saechan.collectormarket.global.excpetion.ErrorCode;
 import com.saechan.collectormarket.member.dto.request.MemberSignInForm;
 import com.saechan.collectormarket.member.dto.request.MemberSignUpForm;
+import com.saechan.collectormarket.member.dto.response.MemberDto;
 import com.saechan.collectormarket.member.exception.MemberException;
 import com.saechan.collectormarket.member.model.entity.Member;
 import com.saechan.collectormarket.member.model.repository.MemberRepository;
@@ -88,20 +89,20 @@ class MemberServiceTest {
     when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
     // when
-    Member member = memberService.signUp(signUpForm);
+    MemberDto memberDto = memberService.signUp(signUpForm);
 
     // then
-    assertNotNull(member);
+    assertNotNull(memberDto);
     verify(memberRepository,times(1)).save(any(Member.class));
     verify(mailService,times(1)).sendEmailAuth(anyString(),anyString());
-    assertEquals("suhsaechan", member.getName());
-    assertEquals("chan4760@naver.com", member.getEmail());
-    assertEquals("encodedPassword", member.getPassword());
-    assertEquals("01066667777", member.getPhone());
-    assertEquals(0.0, member.getPoint());
-    assertEquals(UserRole.ROLE_USER, member.getRole());
-    assertEquals(false, member.getActivated());
-    assertEquals(null, member.getStore());
+    assertEquals("suhsaechan", memberDto.getName());
+    assertEquals("chan4760@naver.com", memberDto.getEmail());
+    assertEquals("encodedPassword", memberDto.getPassword());
+    assertEquals("01066667777", memberDto.getPhone());
+    assertEquals(0.0, memberDto.getPoint());
+    assertEquals(UserRole.ROLE_USER, memberDto.getRole());
+    assertFalse(memberDto.isActivated());
+    assertNull(memberDto.getStoreId());
 
   }
 
