@@ -15,7 +15,40 @@ Content-Type: application/json
 
 {
   "email": "chan4760@naver.com",
-  "password": "chan4760@"
+  "password": "chan4760@@"
 }
 
-### token : 토큰정보 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2MzQ2ODEwLCJleHAiOjE3MDYzNTc2MTB9.WUQBAkeNt5nWM8kuRJTwNQemVSR6_tCyZhK-aHtbH6Y
+### token : 토큰정보 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjIzNzE3LCJleHAiOjE3MDY2MzQ1MTd9.ee-IFbw-z4wTTbzQHQg3aW1SDRmzTiIIdU081Giuv8c
+/
+
+### 회원 업데이트
+PUT http://localhost:8085/member/update
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjI1ODkxLCJleHAiOjE3MDY2MzY2OTF9.aWWcrwX7MJOuWnVZcfxyIPgGuNGz3Pxe6KNhDlR_-6Y
+Content-Type: application/json
+
+{
+  "name": "saechanUpdate",
+  "password": "chan4760@@",
+  "phone": "01066660000"
+}
+
+
+### 회원 이메일 업데이트
+POST http://localhost:8085/member/changeEmail
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjI1ODkxLCJleHAiOjE3MDY2MzY2OTF9.aWWcrwX7MJOuWnVZcfxyIPgGuNGz3Pxe6KNhDlR_-6Y
+Content-Type: application/json
+
+{
+  "email": "chan4760@nate.com"
+}
+
+### 회원 정보 조회
+GET http://localhost:8085/member/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjI1NjA3LCJleHAiOjE3MDY2MzY0MDd9.iWmNLLDb7RBUKgjNThLNZ7rAmJaleXzYgy-4VT2Pdc0
+Content-Type: application/json
+
+### 회원 탈퇴
+DELETE http://localhost:8085/member/delete
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjIzNzE3LCJleHAiOjE3MDY2MzQ1MTd9.ee-IFbw-z4wTTbzQHQg3aW1SDRmzTiIIdU081Giuv8c
+Content-Type: application/json
+

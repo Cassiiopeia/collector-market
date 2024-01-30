@@ -2,9 +2,12 @@ package com.saechan.collectormarket.member.service;
 
 import com.saechan.collectormarket.auth.jwt.JwtTokenProvider;
 import com.saechan.collectormarket.auth.service.MailService;
+import com.saechan.collectormarket.member.dto.request.MemberEmailUpdateForm;
 import com.saechan.collectormarket.member.dto.request.MemberSignInForm;
 import com.saechan.collectormarket.member.dto.request.MemberSignUpForm;
+import com.saechan.collectormarket.member.dto.request.MemberUpdateForm;
 import com.saechan.collectormarket.member.dto.response.MemberDto;
+import com.saechan.collectormarket.member.dto.response.MemberProfileDto;
 import com.saechan.collectormarket.member.exception.MemberException;
 import com.saechan.collectormarket.global.excpetion.ErrorCode;
 import com.saechan.collectormarket.member.model.entity.Member;
@@ -34,9 +37,6 @@ public class MemberService {
   private final static int EMAIL_CERTIFICATION_EXPIRE_MINUTES = 30;
 
   public MemberDto signUp(MemberSignUpForm form) {
-
-    // 형식 검증
-    form.validate();
 
     return memberRepository.findByEmail(form.getEmail()).map(existMember -> {
       if (!existMember.getActivated()) {
@@ -106,9 +106,6 @@ public class MemberService {
 
   public String signIn(MemberSignInForm form) {
 
-    // 형식 검증
-    form.validate();
-
     // 회원 검증
     Member member = verifyMemberFromEmail(form.getEmail());
 
@@ -118,6 +115,59 @@ public class MemberService {
     }
 
     return jwtTokenProvider.createToken(member.getEmail(), member.getRole());
+  }
+
+  @Transactional
+  public MemberDto updateEmail(String memberEmail, MemberEmailUpdateForm form) {
+
+    // 회원 검증
+    Member member = verifyMemberFromEmail(memberEmail);
+
+    // 이메일 인증코드 생성
+    String emailAuthCode = UUID.randomUUID().toString().replaceAll("-", "");
+    mailService.sendEmailAuth(form.getEmail(), emailAuthCode);
+
+    // 이메일 인증 변경
+    member.setEmail(form.getEmail());
+    member.setEmailAuthCode(emailAuthCode);
+    member.setEmailAuthCreateDt(LocalDateTime.now());
+    member.setActivated(false);
+
+    return MemberDto.from(memberRepository.save(member));
+  }
+
+  @Transactional
+  public MemberDto updateExceptEmail(String memberEmail, MemberUpdateForm form) {
+
+    // 회원 검증
+    Member member = verifyMemberFromEmail(memberEmail);
+
+    // 회원 정보 업데이트
+    member.setName(form.getName());
+    member.setPassword(passwordEncoder.encode(form.getPassword()));
+    member.setPhone(form.getPhone());
+
+    // 회원 저장
+    return MemberDto.from(memberRepository.save(member));
+  }
+
+  @Transactional
+  public void delete(String memberEmail) {
+    Member member = verifyMemberFromEmail(memberEmail);
+
+    // 포인트가 0원이어야 탈퇴 가능
+    if (member.getPoint() != 0) {
+      throw new MemberException(ErrorCode.CANT_DELETE_NONZERO_POINTS_MEMBER);
+    }
+
+    memberRepository.deleteById(member.getId());
+  }
+
+  @Transactional(readOnly = true)
+  public MemberProfileDto getProfile(String memberEmail) {
+
+    // 회원 검증
+    return MemberProfileDto.from(verifyMemberFromEmail(memberEmail));
   }
 
 
@@ -134,6 +184,5 @@ public class MemberService {
     }
     return member;
   }
-
 }
 

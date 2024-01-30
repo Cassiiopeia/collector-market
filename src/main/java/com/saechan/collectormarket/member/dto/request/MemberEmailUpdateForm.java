@@ -1,18 +1,16 @@
 package com.saechan.collectormarket.member.dto.request;
 
-
 import com.saechan.collectormarket.global.util.constraint.ValidEmail;
-import com.saechan.collectormarket.global.util.constraint.ValidPassword;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Builder
-public class MemberSignInForm {
+@Setter
+public class MemberEmailUpdateForm {
 
   @ValidEmail
   private String email;
 
-  @ValidPassword
-  private String password;
 }
