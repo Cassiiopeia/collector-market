@@ -29,7 +29,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
   // Security와 JWT 인증 생략하는 URI
   private static final String[] WHITELIST = {
       "/docs/**", // swagger
-      "/v3/api-docs/**" // swagger
+      "/v3/api-docs/**", // swagger
+      "/member/test/sendEmail",
+      "/member/signup", // 회원가입
+      "/member/email-auth/**", // 이메일 인증
+      "/member/signin" // 로그인 경로 허용
   };
 
   @Override

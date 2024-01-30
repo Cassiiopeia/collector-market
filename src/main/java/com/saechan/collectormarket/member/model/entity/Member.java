@@ -42,4 +42,8 @@ public class Member extends BaseEntity {
 
   @OneToOne(mappedBy = "member", fetch=FetchType.LAZY, cascade = CascadeType.ALL)
   private Store store;
+
+  public static Long getStoreId(Member member){
+    return member.getStore() == null ? -1 : member.getStore().getId();
+  }
 }
