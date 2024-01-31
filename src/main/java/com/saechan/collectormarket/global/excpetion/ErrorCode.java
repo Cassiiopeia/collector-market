@@ -43,6 +43,8 @@ public enum ErrorCode {
 
   INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 
+  CANT_DELETE_NONZERO_POINTS_MEMBER(HttpStatus.BAD_REQUEST, "포인트가 0이 아니면 탈퇴할 수 없습니다."),
+
   // JWT
 
   EXPIRED_JWT_TOKEN(HttpStatus.FORBIDDEN, "JWT 토큰이 만료되었습니다."),

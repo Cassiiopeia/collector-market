@@ -43,7 +43,11 @@ public class SecurityConfig {
                 "/member/signin" // 로그인 경로 허용
             ).permitAll()
             // 고객만 허용
-            .requestMatchers(HttpMethod.GET, "/member/profile").hasRole("USER")
+            .requestMatchers(HttpMethod.PUT, "/member/update").hasRole("USER") // 회원 정보 수정
+            .requestMatchers(HttpMethod.POST, "/member/changeEmail").hasRole("USER") // 회원 이메일 수정
+            .requestMatchers(HttpMethod.GET, "/member/profile").hasRole("USER") // 회원 정보 조회
+            .requestMatchers(HttpMethod.GET, "/member/delete").hasRole("USER") // 회원 탈퇴
+            .requestMatchers(HttpMethod.DELETE, "/member/delete").hasRole("USER") // 회원 삭제
             .requestMatchers(HttpMethod.POST, "/store/update").hasRole("USER")
             // 관리자만 허용
             .requestMatchers(HttpMethod.PUT, "/admin/*").hasRole("ADMIN")
@@ -51,8 +55,7 @@ public class SecurityConfig {
             .anyRequest().authenticated())
 
         // jwt filter 추가
-        .addFilterBefore(jwtTokenFilter,
-            UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
