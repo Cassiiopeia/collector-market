@@ -15,10 +15,13 @@ Content-Type: application/json
 
 {
   "email": "chan4760@naver.com",
-  "password": "chan4760@@"
+  "password": "chan4760@"
 }
 
-### token : 토큰정보 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjIzNzE3LCJleHAiOjE3MDY2MzQ1MTd9.ee-IFbw-z4wTTbzQHQg3aW1SDRmzTiIIdU081Giuv8c
+### token : 토큰정보 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+
+
+
 /
 
 ### 회원 업데이트
@@ -52,3 +55,44 @@ DELETE http://localhost:8085/member/delete
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjIzNzE3LCJleHAiOjE3MDY2MzQ1MTd9.ee-IFbw-z4wTTbzQHQg3aW1SDRmzTiIIdU081Giuv8c
 Content-Type: application/json
 
+### 상점 정보 변경
+PUT http://localhost:8085/store/update
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json
+
+{
+  "name": "상점 이름 변경 테스트",
+  "description": "상점 상세내용 변경 테스트",
+  "image": "상점 이미지 변경 테스트"
+}
+
+### 상점 정보 조회
+GET http://localhost:8085/store/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json
+
+### 포인트 내보내기
+POST http://localhost:8085/point/withDraw
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json
+
+{
+  "withDrawAmount": 1000,
+  "accountNumber": "3333043333000"
+}
+
+### 포인트 충전
+POST http://localhost:8085/point/charge
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json
+
+{
+  "chargeAmount": 50000,
+  "accountNumber": "3333043333000"
+}
+
+
+### 포인트 조회
+GET http://localhost:8085/point/history/0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json

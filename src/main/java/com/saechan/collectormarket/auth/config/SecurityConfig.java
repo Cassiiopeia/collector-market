@@ -46,9 +46,14 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.PUT, "/member/update").hasRole("USER") // 회원 정보 수정
             .requestMatchers(HttpMethod.POST, "/member/changeEmail").hasRole("USER") // 회원 이메일 수정
             .requestMatchers(HttpMethod.GET, "/member/profile").hasRole("USER") // 회원 정보 조회
-            .requestMatchers(HttpMethod.GET, "/member/delete").hasRole("USER") // 회원 탈퇴
             .requestMatchers(HttpMethod.DELETE, "/member/delete").hasRole("USER") // 회원 삭제
-            .requestMatchers(HttpMethod.POST, "/store/update").hasRole("USER")
+            .requestMatchers(HttpMethod.PUT, "/store/update").hasRole("USER") // 상점정보 수정
+            .requestMatchers(HttpMethod.GET, "/store/profile").hasRole("USER") // 상점정보 조회
+            .requestMatchers(HttpMethod.POST, "/point/charge").hasRole("USER") // 포인트 충전
+            .requestMatchers(HttpMethod.POST, "/point/withDraw").hasRole("USER") // 포인트 출금(내보내기)
+            .requestMatchers(HttpMethod.GET, "/point/history/**").hasRole("USER") // 포인트 거래내역 조회
+
+
             // 관리자만 허용
             .requestMatchers(HttpMethod.PUT, "/admin/*").hasRole("ADMIN")
             // 그 외는 인증 필요
