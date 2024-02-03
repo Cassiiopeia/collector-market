@@ -1,4 +1,4 @@
-package com.saechan.collectormarket.global.excpetion;
+package com.saechan.collectormarket.global.exception;
 
 import lombok.Getter;
 

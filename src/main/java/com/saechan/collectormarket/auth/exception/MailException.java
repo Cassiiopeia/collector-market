@@ -1,7 +1,7 @@
 package com.saechan.collectormarket.auth.exception;
 
-import com.saechan.collectormarket.global.excpetion.CustomException;
-import com.saechan.collectormarket.global.excpetion.ErrorCode;
+import com.saechan.collectormarket.global.exception.CustomException;
+import com.saechan.collectormarket.global.exception.ErrorCode;
 
 public class MailException extends CustomException {
 

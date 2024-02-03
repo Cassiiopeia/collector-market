@@ -1,7 +1,7 @@
 package com.saechan.collectormarket.auth.jwt;
 
 import com.saechan.collectormarket.auth.exception.TokenException;
-import com.saechan.collectormarket.global.excpetion.ErrorCode;
+import com.saechan.collectormarket.global.exception.ErrorCode;
 import com.saechan.collectormarket.member.model.type.UserRole;
 
 import io.jsonwebtoken.Claims;

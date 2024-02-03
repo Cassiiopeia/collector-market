@@ -1,5 +1,6 @@
 package com.saechan.collectormarket.store.dto.request;
 
+import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -18,6 +19,5 @@ public class StoreUpdateForm {
   @Size(max = 500, message = "상세정보의 길이는 500자 이하여합니다.")
   private String description;
 
-  private String image;
-
+  private MultipartFile image;
 }

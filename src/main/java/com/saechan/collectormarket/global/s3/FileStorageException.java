@@ -1,10 +1,11 @@
-package com.saechan.collectormarket.auth.exception;
+package com.saechan.collectormarket.global.s3;
 
 import com.saechan.collectormarket.global.exception.CustomException;
 import com.saechan.collectormarket.global.exception.ErrorCode;
 
-public class TokenException extends CustomException {
-  public TokenException(ErrorCode errorCode) {
+public class FileStorageException extends CustomException {
+
+  public FileStorageException(ErrorCode errorCode) {
     super(errorCode);
   }
 }

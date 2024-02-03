@@ -9,7 +9,7 @@ import com.saechan.collectormarket.member.dto.request.MemberUpdateForm;
 import com.saechan.collectormarket.member.dto.response.MemberDto;
 import com.saechan.collectormarket.member.dto.response.MemberProfileDto;
 import com.saechan.collectormarket.member.exception.MemberException;
-import com.saechan.collectormarket.global.excpetion.ErrorCode;
+import com.saechan.collectormarket.global.exception.ErrorCode;
 import com.saechan.collectormarket.member.model.entity.Member;
 import com.saechan.collectormarket.member.model.repository.MemberRepository;
 import com.saechan.collectormarket.member.model.type.UserRole;
@@ -172,7 +172,7 @@ public class MemberService {
 
 
   // 이메일 정보로 회원 검색 및 유효성 검증
-  private Member verifyMemberFromEmail(String email) {
+  public Member verifyMemberFromEmail(String email) {
 
     // 회원 존재 확인
     Member member = memberRepository.findByEmail(email)
@@ -184,5 +184,7 @@ public class MemberService {
     }
     return member;
   }
+
+
 }
 

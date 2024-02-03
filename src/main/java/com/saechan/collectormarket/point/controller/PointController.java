@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -46,13 +47,14 @@ public class PointController {
     return ResponseEntity.ok(pointTransactionDto);
   }
 
-  @GetMapping("/history/{page}")
+  @GetMapping("/history")
   public ResponseEntity<Page<PointTransactionDto>> history(
       Authentication authentication,
-      @PathVariable int page
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int pageSize
   ) {
     String memberEmail = authentication.getName();
-    Page<PointTransactionDto> pointTransactionDtos = pointService.history(memberEmail, page);
+    Page<PointTransactionDto> pointTransactionDtos = pointService.history(memberEmail, page, pageSize);
     return ResponseEntity.ok(pointTransactionDtos);
   }
 }

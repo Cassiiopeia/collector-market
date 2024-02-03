@@ -1,9 +1,11 @@
 package com.saechan.collectormarket.point.service;
 
-import com.saechan.collectormarket.global.excpetion.ErrorCode;
+import com.saechan.collectormarket.global.exception.ErrorCode;
 import com.saechan.collectormarket.member.exception.MemberException;
 import com.saechan.collectormarket.member.model.entity.Member;
 import com.saechan.collectormarket.member.model.repository.MemberRepository;
+import com.saechan.collectormarket.member.service.MemberService;
+import com.saechan.collectormarket.member.service.MemberUtils;
 import com.saechan.collectormarket.point.dto.request.ChargePointForm;
 import com.saechan.collectormarket.point.dto.request.WithDrawPointForm;
 import com.saechan.collectormarket.point.dto.response.PointTransactionDto;
@@ -26,11 +28,13 @@ public class PointService {
 
   private final PointTransactionRepository pointTransactionRepository;
   private final MemberRepository memberRepository;
+  private final MemberService memberService;
 
   @Transactional
   public PointTransactionDto charge(String memberEmail, ChargePointForm form) {
-    // 회원 검증
-    Member member = verifyMemberFromEmail(memberEmail);
+    // 회원 검증 + Pessimistic Lock 적용
+    Member member = memberRepository.findByEmailWithLock(memberEmail)
+        .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
 
     // 충전거래 내역 저장 및 회원 업데이트
     Double existingPoint = member.getPoint();
@@ -53,10 +57,9 @@ public class PointService {
 
   @Transactional
   public PointTransactionDto withDraw(String memberEmail, WithDrawPointForm form) {
-
-    log.info("Point Withdraw started");
-    // 회원 검증
-    Member member = verifyMemberFromEmail(memberEmail);
+    // 회원 검증 + Pessimistic Lock 적용
+    Member member = memberRepository.findByEmailWithLock(memberEmail)
+        .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
 
     // 계좌 유효 검증 로직
 
@@ -84,29 +87,16 @@ public class PointService {
   }
 
   @Transactional(readOnly = true)
-  public Page<PointTransactionDto> history(String memberEmail, int page) {
+  public Page<PointTransactionDto> history(String memberEmail, int page, int pageSize) {
     // 회원 검증
-    Member member = verifyMemberFromEmail(memberEmail);
+    Member member = MemberUtils.verifyMemberFromEmail(memberEmail);
 
     // 페이징 요청 설정 (최근 10개의 거래 내역, 최근거래순)
     PageRequest pageRequest
-        = PageRequest.of(page, 10, Sort.by("transactionDt").descending());
+        = PageRequest.of(page, pageSize, Sort.by("transactionDt").descending());
 
     // 페이징 결과 불러오기
     return pointTransactionRepository.findAllByMember(member, pageRequest)
         .map(pointTransaction -> PointTransactionDto.from(pointTransaction));
   }
-
-  private Member verifyMemberFromEmail(String email) {
-    // 회원 존재 확인
-    Member member = memberRepository.findByEmail(email)
-        .orElseThrow(() -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
-
-    // 비활성화 회원 확인
-    if (!member.getActivated()) {
-      throw new MemberException(ErrorCode.MEMBER_NOT_ACTIVATED);
-    }
-    return member;
-  }
-
 }
