@@ -1,6 +1,6 @@
-package com.saechan.collectormarket.global.excpetion;
+package com.saechan.collectormarket.global.exception;
 
-import com.saechan.collectormarket.global.excpetion.dto.ErrorResponse;
+import com.saechan.collectormarket.global.exception.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

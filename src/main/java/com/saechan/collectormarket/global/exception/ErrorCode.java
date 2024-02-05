@@ -1,4 +1,4 @@
-package com.saechan.collectormarket.global.excpetion;
+package com.saechan.collectormarket.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +44,25 @@ public enum ErrorCode {
   INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 
   CANT_DELETE_NONZERO_POINTS_MEMBER(HttpStatus.BAD_REQUEST, "포인트가 0이 아니면 탈퇴할 수 없습니다."),
+
+  // PointTransaction
+
+  NOT_ENOUGH_POINT(HttpStatus.BAD_REQUEST, "포인트가 부족합니다."),
+
+  // Store
+
+  STORE_NOT_FOUND(HttpStatus.BAD_REQUEST, "상점이 존재하지 않습니다."),
+
+
+  // S3 file Storage
+
+  FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "파일 크기가 초과되었습니다."),
+
+  INVALID_FILE_FORMAT(HttpStatus.BAD_REQUEST, "잘못된 파일 형식입니다."),
+
+  FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 중 오류가 발생했습니다."),
+
+  FILE_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 중 오류가 발생했습니다."),
 
   // JWT
 

@@ -1,7 +1,6 @@
 package com.saechan.collectormarket.global.util;
 
-import com.saechan.collectormarket.global.util.ValidateUtilsException;
-import com.saechan.collectormarket.global.excpetion.ErrorCode;
+import com.saechan.collectormarket.global.exception.ErrorCode;
 
 
 public class ValidationUtils {

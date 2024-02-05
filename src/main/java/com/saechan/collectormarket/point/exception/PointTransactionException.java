@@ -1,11 +1,11 @@
-package com.saechan.collectormarket.auth.exception;
+package com.saechan.collectormarket.point.exception;
+
 
 import com.saechan.collectormarket.global.exception.CustomException;
 import com.saechan.collectormarket.global.exception.ErrorCode;
 
-public class MailException extends CustomException {
-
-  public MailException(
+public class PointTransactionException extends CustomException {
+  public PointTransactionException(
       ErrorCode errorCode) {
     super(errorCode);
   }

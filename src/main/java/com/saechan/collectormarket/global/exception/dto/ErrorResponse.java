@@ -1,6 +1,6 @@
-package com.saechan.collectormarket.global.excpetion.dto;
+package com.saechan.collectormarket.global.exception.dto;
 
-import com.saechan.collectormarket.global.excpetion.ErrorCode;
+import com.saechan.collectormarket.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

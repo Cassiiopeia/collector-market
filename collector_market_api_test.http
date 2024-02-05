@@ -18,7 +18,8 @@ Content-Type: application/json
   "password": "chan4760@@"
 }
 
-### token : 토큰정보 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjIzNzE3LCJleHAiOjE3MDY2MzQ1MTd9.ee-IFbw-z4wTTbzQHQg3aW1SDRmzTiIIdU081Giuv8c
+### token : 토큰정보 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2OTQ4MTY5LCJleHAiOjE3MDY5NTg5Njl9.euum1gwD78c_eib_ZtO_FNRLvIfWWoYUPHfcux69YOU
+
 /
 
 ### 회원 업데이트
@@ -52,3 +53,59 @@ DELETE http://localhost:8085/member/delete
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjIzNzE3LCJleHAiOjE3MDY2MzQ1MTd9.ee-IFbw-z4wTTbzQHQg3aW1SDRmzTiIIdU081Giuv8c
 Content-Type: application/json
 
+### 상점 정보 변경
+PUT http://localhost:8085/store/update
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2ODA1NDc4LCJleHAiOjE3MDY4MTYyNzh9.1sV7secbWQRf1QqjK84n0pKwbt385S8SB-WsIBkH7rY
+Content-Type: multipart/form-data
+
+{
+  "name": "상점 이름 변경 테스트",
+  "description": "상점 상세내용 변경 테스트",
+  "image": "/docs/img/main.png"
+}
+
+### 상점 정보 조회
+GET http://localhost:8085/store/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json
+
+### 상점 이미지 업로드
+POST http://localhost:8085/files/upload
+Content-Type: multipart/form-data
+file=@"/doc/img/main.png"
+
+### 상점 이미지 여러장 업로드
+POST http://localhost:8085/files/upload-muliple
+Content-Type: multipart/form-data
+
+< file=@/doc/img/main.png
+< file=@/doc/img/erd_graph.png
+
+
+< file=@/doc/img/main.png
+
+### 포인트 내보내기
+POST http://localhost:8085/point/withDraw
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json
+
+{
+  "withDrawAmount": 1000,
+  "accountNumber": "3333043333000"
+}
+
+### 포인트 충전
+POST http://localhost:8085/point/charge
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json
+
+{
+  "chargeAmount": 50000,
+  "accountNumber": "3333043333000"
+}
+
+
+### 포인트 조회
+GET http://localhost:8085/point/history/0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json
