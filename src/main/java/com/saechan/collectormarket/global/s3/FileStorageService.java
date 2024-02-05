@@ -1,5 +1,7 @@
 package com.saechan.collectormarket.global.s3;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.saechan.collectormarket.global.exception.ErrorCode;
@@ -24,26 +26,34 @@ public class FileStorageService {
   private String bucket;
 
   public String uploadFile(MultipartFile file, String property, Long id) {
-    // 형식 검증
-    FileStorageUtils.validateFile(file);
-
-    // 파일 이름 설정
-    String fileName = FileStorageUtils.getFileName(file, property, id);
-
-    // 파일 업로드
     try {
+      // 형식 검증
+      FileStorageUtils.validateFile(file);
+
+      // 파일 이름 설정
+      String fileName = FileStorageUtils.getFileName(file, property, id);
+
+      // 파일 업로드
       ObjectMetadata metadata = new ObjectMetadata();
       metadata.setContentLength(file.getSize());
       metadata.setContentType(file.getContentType());
       amazonS3.putObject(bucket, fileName, file.getInputStream(), metadata);
-    } catch (IOException e) {
-      throw new FileStorageException(ErrorCode.FILE_UPLOAD_ERROR);
-    }
 
-    // URL 반환
-    String fileUrl = amazonS3.getUrl(bucket, fileName).toString();
-    log.info("파일 업로드 완료 URL : {}", fileUrl);
-    return fileUrl;
+      // URL 반환
+      String fileUrl = amazonS3.getUrl(bucket, fileName).toString();
+      log.info("파일 업로드 완료 URL : {}", fileUrl);
+      return fileUrl;
+
+    } catch (IOException e) {
+      log.error("파일 업로드 오류 : IOException : {}", e.getMessage());
+      throw new FileStorageException(ErrorCode.FILE_UPLOAD_ERROR);
+    } catch (AmazonServiceException e) {
+      log.error("파일 업로드 오류 : AmazonServiceException : {}", e.getMessage());
+      throw new FileStorageException(ErrorCode.AWS_SERVICE_EXCEPTION);
+    } catch (AmazonClientException e) {
+      log.error("파일 업로드 오류 : AmazonClientException : {}", e.getMessage());
+      throw new FileStorageException(ErrorCode.AWS_CLIENT_EXCEPTION);
+    }
   }
 
   public List<String> uploadFiles(
@@ -51,10 +61,16 @@ public class FileStorageService {
       String property,
       Long id
   ) {
+
+    // 최대 업로드 개수 확인
+    FileStorageUtils.validateMaxUploadCount(multipartFiles);
+
+    // 각각 파일 업로드
     List<String> urls = new ArrayList<>();
     multipartFiles.forEach(multipartFile -> {
       urls.add(uploadFile(multipartFile, property, id));
     });
+    log.info("복수 파일 업로드 완료 URL : {}", urls.toString());
     return urls;
   }
 
@@ -65,11 +81,27 @@ public class FileStorageService {
 
       // S3에서 파일 삭제
       amazonS3.deleteObject(bucket, fileName);
-      log.info("파일 삭제 완료 : {}", fileName);
 
+      // 파일 삭제 확인
+      if (!isPresent(bucket, fileName)) {
+        log.info("파일 삭제 완료 : {}", fileName);
+      } else {
+        log.error("파일 삭제 실패 : {}", fileName);
+        throw new FileStorageException(ErrorCode.FILE_DELETE_ERROR);
+      }
+    } catch (AmazonClientException e) {
+      log.error("파일 삭제 오류 : AmazonClientException : {}", e.getMessage());
+      throw new FileStorageException(ErrorCode.FILE_DELETE_ERROR);
     } catch (Exception e) {
+      log.error("파일 삭제 오류 : Exception : {}", e.getMessage());
       throw new FileStorageException(ErrorCode.FILE_DELETE_ERROR);
     }
   }
+
+  // S3에서 파일 존재 여부 확인
+  private boolean isPresent(String bucket, String filename) {
+    return amazonS3.doesObjectExist(bucket, filename);
+  }
+
 
 }
