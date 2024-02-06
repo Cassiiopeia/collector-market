@@ -5,6 +5,8 @@ import static com.saechan.collectormarket.transaction.model.type.TransactionStat
 
 import com.saechan.collectormarket.global.exception.ErrorCode;
 import com.saechan.collectormarket.global.s3.FileStorageService;
+import com.saechan.collectormarket.global.s3.ImageUploadService;
+import com.saechan.collectormarket.global.s3.type.ImageProperty;
 import com.saechan.collectormarket.member.model.entity.Member;
 import com.saechan.collectormarket.member.service.MemberUtils;
 import com.saechan.collectormarket.product.dto.request.ProductCreateForm;
@@ -12,14 +14,11 @@ import com.saechan.collectormarket.product.dto.request.ProductUpdateForm;
 import com.saechan.collectormarket.product.dto.response.ProductDto;
 import com.saechan.collectormarket.product.exception.ProductException;
 import com.saechan.collectormarket.product.model.entity.Product;
-import com.saechan.collectormarket.product.model.entity.ProductImage;
 import com.saechan.collectormarket.product.model.repository.ProductImageRepository;
 import com.saechan.collectormarket.product.model.repository.ProductRepository;
 import com.saechan.collectormarket.store.exception.StoreException;
 import com.saechan.collectormarket.store.model.entity.Store;
 import com.saechan.collectormarket.store.model.repository.StoreRepository;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +29,7 @@ public class ProductService {
 
   private final ProductRepository productRepository;
   private final FileStorageService fileStorageService;
+  private final ImageUploadService imageUploadService;
   private final StoreRepository storeRepository;
   private final ProductImageRepository productImageRepository;
 
@@ -57,19 +57,11 @@ public class ProductService {
             .build()
     );
 
-    // 복수 이미지 파일처리
-    List<String> imageUrls = fileStorageService.uploadFiles(
-        form.getImages(), "product", newProduct.getId());
-
-    List<ProductImage> productImages = new ArrayList<>();
-    imageUrls.forEach(imageUrl -> {
-      ProductImage productImage = ProductImage.builder()
-          .imageUrl(imageUrl)
-          .product(newProduct)
-          .build();
-      productImages.add(productImage);
-    });
-    newProduct.setImages(productImages);
+    // ProductImage 복수객체 생성 -> Product 에 List<ProductImage> 지정
+    newProduct.setImages(
+        imageUploadService.uploadProductImages( newProduct, form.getImages(),
+            ImageProperty.PRODUCT, newProduct.getId())
+    );
 
     // 상품 생성
     productRepository.save(newProduct);
@@ -89,27 +81,23 @@ public class ProductService {
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
 
-    // 기존 이미지 존재시 삭제
-    if (!product.getImages().isEmpty()) {
+    // 기존 이미지 존재시 삭제 (S3삭제, ProductImage 삭제)
+    if (product.getImages() != null && !product.getImages().isEmpty()) {
       product.getImages().forEach(image -> {
         fileStorageService.deleteFile(image.getImageUrl());
         productImageRepository.delete(image);
       });
-      product.getImages().clear();
+      product.setImages(null); // 상품 이미지 초기화
     }
 
-    // 이미지 초기화 후 복수 이미지 파일처리
-    List<String> imageUrls = fileStorageService.uploadFiles(
-        form.getImages(), "product", product.getId());
-    List<ProductImage> productImages = new ArrayList<>();
-    imageUrls.forEach(imageUrl -> {
-      ProductImage productImage = ProductImage.builder()
-          .imageUrl(imageUrl)
-          .product(product)
-          .build();
-      productImages.add(productImage);
-    });
-    product.setImages(productImages);
+    // Form 이미지 파일이 존재시
+    if(!form.getImages().isEmpty()){
+      // S3 업로드 -> ProductImage 생성 -> Product 에 List<ProductImage> 지정
+      product.setImages(
+          imageUploadService.uploadProductImages( product, form.getImages(),
+              ImageProperty.PRODUCT, product.getId())
+      );
+    }
 
     // 상품 업데이트
     product.setName(form.getName());

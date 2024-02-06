@@ -81,19 +81,10 @@ public class FileStorageService {
 
       // S3에서 파일 삭제
       amazonS3.deleteObject(bucket, fileName);
+      log.info("파일 삭제완료 : {}", fileName);
 
-      // 파일 삭제 확인
-      if (!isPresent(bucket, fileName)) {
-        log.info("파일 삭제 완료 : {}", fileName);
-      } else {
-        log.error("파일 삭제 실패 : {}", fileName);
-        throw new FileStorageException(ErrorCode.FILE_DELETE_ERROR);
-      }
     } catch (AmazonClientException e) {
       log.error("파일 삭제 오류 : AmazonClientException : {}", e.getMessage());
-      throw new FileStorageException(ErrorCode.FILE_DELETE_ERROR);
-    } catch (Exception e) {
-      log.error("파일 삭제 오류 : Exception : {}", e.getMessage());
       throw new FileStorageException(ErrorCode.FILE_DELETE_ERROR);
     }
   }

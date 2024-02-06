@@ -1,8 +1,9 @@
 package com.saechan.collectormarket.global.util;
 
-import com.saechan.collectormarket.global.entity.type.UploadFileFormat;
+import com.saechan.collectormarket.global.s3.type.UploadFileFormat;
 import com.saechan.collectormarket.global.exception.ErrorCode;
 import com.saechan.collectormarket.global.s3.FileStorageException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,11 @@ public class FileStorageUtils {
   private static final int MAX_UPLOAD_COUNT = 10; // 최대 업로드 갯수
 
   // 파일 이름 생성
-  public static String getFileName(MultipartFile file, String prefix, long id) {
-    return prefix + "_" + Long.toString(id) + "_" + UUID.randomUUID().toString() + "_"
+  public static String getFileName(MultipartFile file, String property, long id) {
+    return property + "_"
+        + Long.toString(id) + "_"
+        + LocalDateTime.now().toString().replaceAll("[:\\-\\.]", "") + "_"
+        + UUID.randomUUID().toString().replaceAll("-","").substring(0,9)+ "_"
         + file.getOriginalFilename();
   }
 
