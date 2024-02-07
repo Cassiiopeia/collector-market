@@ -6,6 +6,8 @@ import com.saechan.collectormarket.product.model.type.ProductCategory;
 import com.saechan.collectormarket.product.model.type.ProductStatus;
 import com.saechan.collectormarket.store.model.entity.Store;
 
+import com.saechan.collectormarket.transaction.model.type.TransactionStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,6 +18,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,6 +47,9 @@ public class Product extends BaseEntity {
   @Column(nullable = false)
   private Double price;
 
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+  private List<ProductImage> images = new ArrayList<>();
+
   @Enumerated(EnumType.STRING)
   private ProductStatus productStatus;
 
@@ -52,6 +60,9 @@ public class Product extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   private ProductCategory productCategory;
+
+  @Enumerated(EnumType.STRING)
+  private TransactionStatus transactionStatus;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "store_id")

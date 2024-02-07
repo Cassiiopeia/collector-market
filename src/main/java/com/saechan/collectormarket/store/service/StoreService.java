@@ -2,6 +2,8 @@ package com.saechan.collectormarket.store.service;
 
 import com.saechan.collectormarket.global.s3.FileStorageService;
 import com.saechan.collectormarket.global.exception.ErrorCode;
+import com.saechan.collectormarket.global.s3.ImageUploadService;
+import com.saechan.collectormarket.global.s3.type.ImageProperty;
 import com.saechan.collectormarket.member.model.entity.Member;
 import com.saechan.collectormarket.member.service.MemberUtils;
 import com.saechan.collectormarket.store.dto.request.StoreUpdateForm;
@@ -12,7 +14,6 @@ import com.saechan.collectormarket.store.model.repository.StoreRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,8 @@ public class StoreService {
   private final StoreRepository storeRepository;
 
   private final FileStorageService fileStorageService;
+
+  private final ImageUploadService imageUploadService;
 
   public Store createStore(Member member) {
 
@@ -48,22 +51,21 @@ public class StoreService {
     Store store = storeRepository.findById(member.getStore().getId())
         .orElseThrow(() -> new StoreException(ErrorCode.STORE_NOT_FOUND));
 
-    // 기존 이미지 있으면 삭제
-    if( store.getImage() != null && !store.getImage().isEmpty()){
+    // 상점의 기존 이미지 존재시 삭제
+    if (store.getImage() != null && !store.getImage().isEmpty()) {
       fileStorageService.deleteFile(store.getImage());
+      store.setImage(null);
     }
 
-    // 새 이미지 업로드
-    MultipartFile imageFile = form.getImage();
-    String imageUrl = null;
-    if( !imageFile.isEmpty()){
-      imageUrl = fileStorageService.uploadFile(imageFile,"store", store.getId());
+    // Form 이미지 파일 존재시
+    if (!form.getImage().isEmpty()) {
+      // 이미지 S3 업로드 -> 상점 업데이트
+      store.setImage(imageUploadService.uploadStoreImage(form.getImage(), ImageProperty.STORE, store.getId()));
     }
 
     // 상점 업데이트
     store.setName(form.getName());
     store.setDescription(form.getDescription());
-    store.setImage(imageUrl);
 
     // 상점 저장
     return StoreDto.from(storeRepository.save(store));

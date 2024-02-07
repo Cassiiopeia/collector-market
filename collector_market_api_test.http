@@ -3,11 +3,15 @@ POST http://localhost:8085/member/signup
 Content-Type: application/json
 
 {
-  "name": "suhsaeechan",
+  "name": "suhsaechan",
   "email": "chan4760@naver.com",
   "password": "chan4760@",
   "phone": "01066667777"
 }
+
+### 이메일 인증
+GET http://localhost:8085/member/email-auth?code=51bef22b240a466a8037e8dfddbcac77
+Content-Type: application/json
 
 ### 로그인
 POST http://localhost:8085/member/signin
@@ -15,28 +19,29 @@ Content-Type: application/json
 
 {
   "email": "chan4760@naver.com",
-  "password": "chan4760@@"
+  "password": "chan4760@"
 }
 
-### token : 토큰정보 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2OTQ4MTY5LCJleHAiOjE3MDY5NTg5Njl9.euum1gwD78c_eib_ZtO_FNRLvIfWWoYUPHfcux69YOU
+### token : 토큰정보 : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MjE1NTE2LCJleHAiOjE3MDcyMjYzMTZ9.Dw-oqhlAWIBzNykvwe8Ix6hSMWYjaho9pUDhwH4kfXA
+
 
 /
 
 ### 회원 업데이트
 PUT http://localhost:8085/member/update
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjI1ODkxLCJleHAiOjE3MDY2MzY2OTF9.aWWcrwX7MJOuWnVZcfxyIPgGuNGz3Pxe6KNhDlR_-6Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MTIzNTI5LCJleHAiOjE3MDcxMzQzMjl9.dm1pGIAdt8cX5u4oF1Uu2uaqYIrRYmGY5zv0lmLn0TQ
 Content-Type: application/json
 
 {
   "name": "saechanUpdate",
-  "password": "chan4760@@",
-  "phone": "01066660000"
+  "password": "chan4760@",
+  "phone": "+123456789012"
 }
 
 
 ### 회원 이메일 업데이트
 POST http://localhost:8085/member/changeEmail
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjI1ODkxLCJleHAiOjE3MDY2MzY2OTF9.aWWcrwX7MJOuWnVZcfxyIPgGuNGz3Pxe6KNhDlR_-6Y
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MTIzNTk2LCJleHAiOjE3MDcxMzQzOTZ9.48dOvlDNeiNa51nwzBoGcILGBv6d2cTClysTtC7cPEc
 Content-Type: application/json
 
 {
@@ -45,7 +50,7 @@ Content-Type: application/json
 
 ### 회원 정보 조회
 GET http://localhost:8085/member/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjI1NjA3LCJleHAiOjE3MDY2MzY0MDd9.iWmNLLDb7RBUKgjNThLNZ7rAmJaleXzYgy-4VT2Pdc0
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MTIzNTk2LCJleHAiOjE3MDcxMzQzOTZ9.48dOvlDNeiNa51nwzBoGcILGBv6d2cTClysTtC7cPEc
 Content-Type: application/json
 
 ### 회원 탈퇴
@@ -53,54 +58,34 @@ DELETE http://localhost:8085/member/delete
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NjIzNzE3LCJleHAiOjE3MDY2MzQ1MTd9.ee-IFbw-z4wTTbzQHQg3aW1SDRmzTiIIdU081Giuv8c
 Content-Type: application/json
 
-### 상점 정보 변경
+### 상점 정보 변경 (postman에서 확인)
 PUT http://localhost:8085/store/update
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2ODA1NDc4LCJleHAiOjE3MDY4MTYyNzh9.1sV7secbWQRf1QqjK84n0pKwbt385S8SB-WsIBkH7rY
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MTIzNTk2LCJleHAiOjE3MDcxMzQzOTZ9.48dOvlDNeiNa51nwzBoGcILGBv6d2cTClysTtC7cPEc
 Content-Type: multipart/form-data
 
-{
-  "name": "상점 이름 변경 테스트",
-  "description": "상점 상세내용 변경 테스트",
-  "image": "/docs/img/main.png"
-}
 
 ### 상점 정보 조회
 GET http://localhost:8085/store/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MTIzNTk2LCJleHAiOjE3MDcxMzQzOTZ9.48dOvlDNeiNa51nwzBoGcILGBv6d2cTClysTtC7cPEc
 Content-Type: application/json
-
-### 상점 이미지 업로드
-POST http://localhost:8085/files/upload
-Content-Type: multipart/form-data
-file=@"/doc/img/main.png"
-
-### 상점 이미지 여러장 업로드
-POST http://localhost:8085/files/upload-muliple
-Content-Type: multipart/form-data
-
-< file=@/doc/img/main.png
-< file=@/doc/img/erd_graph.png
-
-
-< file=@/doc/img/main.png
 
 ### 포인트 내보내기
 POST http://localhost:8085/point/withDraw
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MTIzNTk2LCJleHAiOjE3MDcxMzQzOTZ9.48dOvlDNeiNa51nwzBoGcILGBv6d2cTClysTtC7cPEc
 Content-Type: application/json
 
 {
-  "withDrawAmount": 1000,
+  "withDrawAmount": 5000,
   "accountNumber": "3333043333000"
 }
 
 ### 포인트 충전
 POST http://localhost:8085/point/charge
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MTIzNTk2LCJleHAiOjE3MDcxMzQzOTZ9.48dOvlDNeiNa51nwzBoGcILGBv6d2cTClysTtC7cPEc
 Content-Type: application/json
 
 {
-  "chargeAmount": 50000,
+  "chargeAmount": 10,
   "accountNumber": "3333043333000"
 }
 
@@ -108,4 +93,18 @@ Content-Type: application/json
 ### 포인트 조회
 GET http://localhost:8085/point/history/0
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2Nzc3MjE3LCJleHAiOjE3MDY3ODgwMTd9.cjGFBJGOLrNobzONvSWUCuCEt-INNUr7LC_L8GtSB7g
+Content-Type: application/json
+
+
+### 상품 생성 (postman으로 확인)
+POST http://localhost:8085/product/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NzU5NzIxLCJleHAiOjE3MDY3NzA1MjF9.vKQE7QWPumM-WPTQn-NfjkQ33TYDCv67rnue3Ho9eLs
+
+### 상품 수정(업데이트) (postman으로 확인)
+PUT http://localhost:8085/product/update
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NzU5NzIxLCJleHAiOjE3MDY3NzA1MjF9.vKQE7QWPumM-WPTQn-NfjkQ33TYDCv67rnue3Ho9eLs
+
+### 상품 조회
+GET http://localhost:8085/product/view?id=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MTI1ODY4LCJleHAiOjE3MDcxMzY2Njh9.JU_xScAzQB_NE16vQTOqLZSv16N0Lygp-v1fn_Wxp9g
 Content-Type: application/json

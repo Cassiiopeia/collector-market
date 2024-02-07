@@ -58,7 +58,7 @@ public class Store extends BaseEntity {
   @JoinColumn(name = "member_id")
   private Member member;
 
-  @OneToMany(mappedBy = "store", orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
   private Set<ChatRoomStore> chatRoomStores = new HashSet<>();
 }
 

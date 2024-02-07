@@ -1,7 +1,6 @@
-package com.saechan.collectormarket.global.entity.type;
+package com.saechan.collectormarket.global.s3.type;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 public enum UploadFileFormat {

@@ -53,6 +53,9 @@ public enum ErrorCode {
 
   STORE_NOT_FOUND(HttpStatus.BAD_REQUEST, "상점이 존재하지 않습니다."),
 
+  // product
+
+  PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "상품이 존재하지 않습니다."),
 
   // S3 file Storage
 
@@ -63,6 +66,12 @@ public enum ErrorCode {
   FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 중 오류가 발생했습니다."),
 
   FILE_DELETE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 삭제 중 오류가 발생했습니다."),
+
+  FILE_UPLOAD_COUNT_LIMIT(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 최대 개수를 초과하였습니다."),
+
+  AWS_SERVICE_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "AWS 서비스에 문제가 발생하였습니다."),
+
+  AWS_CLIENT_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "AWS 클라언스서비스 연동에 문제가 발생하였습니다."),
 
   // JWT
 
