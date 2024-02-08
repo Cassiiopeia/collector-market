@@ -57,6 +57,14 @@ public enum ErrorCode {
 
   PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "상품이 존재하지 않습니다."),
 
+  PRODUCT_ACCESS_DENIED(HttpStatus.BAD_REQUEST, "상품 접근 권한이 없습니다."),
+
+  // lock
+
+  LOCK_GET_FAILED(HttpStatus.BAD_REQUEST, "락을 생성에 실패하였습니다."),
+
+  LOCK_INTERRUPTED(HttpStatus.BAD_REQUEST, "락 작업 스레드가 중단되었습니다."),
+
   // S3 file Storage
 
   FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "파일 크기가 초과되었습니다."),

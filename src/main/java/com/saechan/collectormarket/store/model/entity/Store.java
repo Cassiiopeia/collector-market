@@ -42,7 +42,7 @@ public class Store extends BaseEntity {
   @Column(length = 500)
   private String description;
 
-  private String image;
+  private String imageUrl;
 
   private LocalDateTime openDt;
 
@@ -58,6 +58,7 @@ public class Store extends BaseEntity {
   @JoinColumn(name = "member_id")
   private Member member;
 
+  @Builder.Default
   @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
   private Set<ChatRoomStore> chatRoomStores = new HashSet<>();
 }

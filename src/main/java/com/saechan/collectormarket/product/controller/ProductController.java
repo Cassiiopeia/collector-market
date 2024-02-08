@@ -42,6 +42,16 @@ public class ProductController {
     return ResponseEntity.ok(productDto);
   }
 
+  @DeleteMapping("/delete")
+  public ResponseEntity<Void> deleteProduct(
+      Authentication authentication,
+      @RequestParam long id
+  ){
+    String memberEmail = authentication.getName();
+    productService.delete(memberEmail, id);
+    return ResponseEntity.noContent().build();
+  }
+
   @GetMapping("/view")
   public ResponseEntity<ProductDto> viewProduct(
       Authentication authentication,

@@ -58,7 +58,7 @@ public class ProductService {
     );
 
     // ProductImage 복수객체 생성 -> Product 에 List<ProductImage> 지정
-    newProduct.setImages(
+    newProduct.setProductImages(
         imageUploadService.uploadProductImages( newProduct, form.getImages(),
             ImageProperty.PRODUCT, newProduct.getId())
     );
@@ -82,18 +82,18 @@ public class ProductService {
         .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
 
     // 기존 이미지 존재시 삭제 (S3삭제, ProductImage 삭제)
-    if (product.getImages() != null && !product.getImages().isEmpty()) {
-      product.getImages().forEach(image -> {
+    if (product.getProductImages() != null && !product.getProductImages().isEmpty()) {
+      product.getProductImages().forEach(image -> {
         fileStorageService.deleteFile(image.getImageUrl());
         productImageRepository.delete(image);
       });
-      product.setImages(null); // 상품 이미지 초기화
+      product.setProductImages(null); // 상품 이미지 초기화
     }
 
     // Form 이미지 파일이 존재시
     if(!form.getImages().isEmpty()){
       // S3 업로드 -> ProductImage 생성 -> Product 에 List<ProductImage> 지정
-      product.setImages(
+      product.setProductImages(
           imageUploadService.uploadProductImages( product, form.getImages(),
               ImageProperty.PRODUCT, product.getId())
       );
@@ -113,6 +113,30 @@ public class ProductService {
     // 업데이트 상품 저장
     productRepository.save(product);
     return ProductDto.from(product);
+  }
+
+  @Transactional
+  public void delete(String memberEmail, Long productId){
+    // 회원 검증
+    Member member = MemberUtils.verifyMemberFromEmail(memberEmail);
+
+    // 상품 검증
+    Product product = productRepository.findById(productId)
+        .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
+
+    // 소유 상품 검증
+    if (!product.getStore().getMember().getEmail().equals(memberEmail)) {
+      throw new ProductException(ErrorCode.PRODUCT_ACCESS_DENIED);
+    }
+
+    // S3 상품 이미지 삭제
+    if (product.getProductImages() != null && !product.getProductImages().isEmpty()) {
+      product.getProductImages().forEach(
+          image -> fileStorageService.deleteFile(image.getImageUrl()));
+    }
+
+    // 상품 삭제
+    productRepository.deleteById(productId);
   }
 
   @Transactional(readOnly = true)
