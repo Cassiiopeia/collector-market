@@ -40,6 +40,11 @@ spring:
     jwt:
       secret: ${JWT_SECRET}
       expire: ${JWT_EXPIRE} # 3hour
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      password: ${REDIS_PASSWORD}
+      port: 6379
 
 domain:
   address: localhost

@@ -47,8 +47,9 @@ public class Product extends BaseEntity {
   @Column(nullable = false)
   private Double price;
 
+  @Builder.Default
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-  private List<ProductImage> images = new ArrayList<>();
+  private List<ProductImage> productImages = new ArrayList<>();
 
   @Enumerated(EnumType.STRING)
   private ProductStatus productStatus;

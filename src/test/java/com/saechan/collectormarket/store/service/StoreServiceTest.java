@@ -47,7 +47,7 @@ class StoreServiceTest {
     store = Store.builder()
         .name("테스트상점1호")
         .description("테스트 상세 정보")
-        .image("테스트 이미지 주소")
+        .imageUrl("테스트 이미지 주소")
         .build();
   }
 
@@ -71,7 +71,7 @@ class StoreServiceTest {
     //then
     assertEquals("상점 "+createdStore.getId()+"호",createdStore.getName());
     assertNull(createdStore.getDescription());
-    assertNull(createdStore.getImage());
+    assertNull(createdStore.getImageUrl());
     assertNotNull(createdStore.getOpenDt());
     assertNull(createdStore.getProducts());
     assertNull(createdStore.getReviews());

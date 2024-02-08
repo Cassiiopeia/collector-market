@@ -54,7 +54,8 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.GET, "/point/history/**").hasRole("USER") // 포인트 거래내역 조회
             .requestMatchers(HttpMethod.POST, "/product/create").hasRole("USER") // 상품 생성
             .requestMatchers(HttpMethod.PUT, "/product/update").hasRole("USER") // 상품 수정(업데이트)
-            .requestMatchers(HttpMethod.GET, "/product/view").hasRole("USER") // 상품 수정(업데이트)
+            .requestMatchers(HttpMethod.DELETE, "/product/delete").hasRole("USER") // 상품 삭제
+            .requestMatchers(HttpMethod.GET, "/product/view").hasRole("USER") // 상품 상세정보
 
 
             // 관리자만 허용

@@ -42,7 +42,7 @@ public class ProductDto {
         .name(product.getName())
         .description(product.getDescription())
         .price(product.getPrice())
-        .images(product.getImages().stream()
+        .images(product.getProductImages().stream()
             .map(ProductImageDto::from)
             .collect(Collectors.toList()))
         .productStatus(product.getProductStatus())

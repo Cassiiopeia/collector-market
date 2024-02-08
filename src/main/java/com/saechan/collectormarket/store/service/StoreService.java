@@ -30,7 +30,7 @@ public class StoreService {
     Store store = Store.builder()
         .name("tempName") // 임시이름
         .description(null)
-        .image(null)
+        .imageUrl(null)
         .openDt(LocalDateTime.now())
         .products(null)
         .reviews(null)
@@ -52,15 +52,15 @@ public class StoreService {
         .orElseThrow(() -> new StoreException(ErrorCode.STORE_NOT_FOUND));
 
     // 상점의 기존 이미지 존재시 삭제
-    if (store.getImage() != null && !store.getImage().isEmpty()) {
-      fileStorageService.deleteFile(store.getImage());
-      store.setImage(null);
+    if (store.getImageUrl() != null && !store.getImageUrl().isEmpty()) {
+      fileStorageService.deleteFile(store.getImageUrl());
+      store.setImageUrl(null);
     }
 
     // Form 이미지 파일 존재시
     if (!form.getImage().isEmpty()) {
       // 이미지 S3 업로드 -> 상점 업데이트
-      store.setImage(imageUploadService.uploadStoreImage(form.getImage(), ImageProperty.STORE, store.getId()));
+      store.setImageUrl(imageUploadService.uploadStoreImage(form.getImage(), ImageProperty.STORE, store.getId()));
     }
 
     // 상점 업데이트

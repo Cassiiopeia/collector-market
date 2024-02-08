@@ -38,7 +38,7 @@ public class StoreDto {
     return StoreDto.builder()
         .name(store.getName())
         .description(store.getDescription())
-        .image(store.getImage())
+        .image(store.getImageUrl())
         .openDt(store.getOpenDt())
         .productIds(store.getProducts().stream()
             .map(Product::getId)

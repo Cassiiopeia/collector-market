@@ -104,6 +104,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iL
 PUT http://localhost:8085/product/update
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NzU5NzIxLCJleHAiOjE3MDY3NzA1MjF9.vKQE7QWPumM-WPTQn-NfjkQ33TYDCv67rnue3Ho9eLs
 
+### 상품 삭제
+DELETE http://localhost:8085/product/delete?id=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA2NzU5NzIxLCJleHAiOjE3MDY3NzA1MjF9.vKQE7QWPumM-WPTQn-NfjkQ33TYDCv67rnue3Ho9eLs
+
 ### 상품 조회
 GET http://localhost:8085/product/view?id=1
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjaGFuNDc2MEBuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzA3MTI1ODY4LCJleHAiOjE3MDcxMzY2Njh9.JU_xScAzQB_NE16vQTOqLZSv16N0Lygp-v1fn_Wxp9g
