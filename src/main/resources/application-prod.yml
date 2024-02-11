@@ -1,0 +1,9 @@
+spring:
+  data:
+    redis:
+      host: 220.85.169.165
+      port: 6379
+
+elasticsearch:
+  host: 220.85.169.165
+  port: 9200

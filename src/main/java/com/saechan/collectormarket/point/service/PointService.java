@@ -41,10 +41,9 @@ public class PointService {
     return lockHandler.runWithLock(
         CHARGE_LOCK_KEY + memberEmail, WAIT_TIME_SECOND, LEASE_TIME_SECOND,
         () -> {
-          // 회원 검증 + Pessimistic Lock 적용
-          Member member = memberRepository.findByEmailWithLock(memberEmail)
-              .orElseThrow(
-                  () -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+          // 회원 검증
+          Member member = MemberUtils.verifyMemberFromEmail(memberEmail);
+
 
           // 충전거래 내역 저장 및 회원 업데이트
           Double existingPoint = member.getPoint();
@@ -72,10 +71,8 @@ public class PointService {
     return lockHandler.runWithLock(
         WITHDRAW_LOCK_KEY + memberEmail, WAIT_TIME_SECOND, LEASE_TIME_SECOND,
         () -> {
-          // 회원 검증 + Pessimistic Lock 적용
-          Member member = memberRepository.findByEmailWithLock(memberEmail)
-              .orElseThrow(
-                  () -> new MemberException(ErrorCode.MEMBER_NOT_FOUND));
+          // 회원 검증
+          Member member = MemberUtils.verifyMemberFromEmail(memberEmail);
 
           // 출금거래 내역 저장 및 회원 업데이트
           Double existingPoint = member.getPoint();

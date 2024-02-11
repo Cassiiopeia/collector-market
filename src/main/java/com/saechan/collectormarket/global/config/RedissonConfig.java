@@ -31,9 +31,7 @@ public class RedissonConfig {
   public RedissonClient redisson() throws IOException {
     Config config = new Config();
     config.useSingleServer()
-//        .setAddress("redis://" + host + ":" + port)
-        .setAddress("redis://" +"127.0.0.1" + ":" + port); //test
-//        .setPassword(password);
+        .setAddress("redis://" + host + ":" + port);
 
     return Redisson.create(config);
   }
