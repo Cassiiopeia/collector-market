@@ -1,8 +1,11 @@
 server:
   shutdown: graceful
-  port: 8085
+  port: 8080
 
 spring:
+  profiles:
+    active: prod
+
   servlet:
     multipart:
       max-file-size: 10MB
@@ -73,4 +76,5 @@ logging:
     org.springframework.web: INFO
     org.hibernate.SQL: INFO
     org.springframework.security: DEBUG
+    org.redisson: INFO
     com.amazonaws.util.EC2MetadataUtils: ERROR
