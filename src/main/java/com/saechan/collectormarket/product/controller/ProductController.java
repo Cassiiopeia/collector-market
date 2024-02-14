@@ -3,8 +3,10 @@ package com.saechan.collectormarket.product.controller;
 import com.saechan.collectormarket.product.dto.request.ProductCreateForm;
 import com.saechan.collectormarket.product.dto.request.ProductUpdateForm;
 import com.saechan.collectormarket.product.dto.response.ProductDto;
+import com.saechan.collectormarket.product.service.ProductSearchService;
 import com.saechan.collectormarket.product.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
 
   private final ProductService productService;
+  private final ProductSearchService productSearchService;
 
   @PostMapping("/create")
   public ResponseEntity<ProductDto> createProduct(
@@ -61,4 +64,17 @@ public class ProductController {
     ProductDto productDto = productService.view(memberEmail, id);
     return ResponseEntity.ok(productDto);
   }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<ProductDto>> searchProduct(
+      Authentication authentication,
+      @RequestParam String name,
+      @RequestParam String productStatus,
+      @RequestParam String productCategory
+  ){
+    List<ProductDto> productDtos = productSearchService.searchByNameAndProductStatusAndProductCategory(
+        name, productStatus, productCategory);
+    return ResponseEntity.ok(productDtos);
+  }
+
 }

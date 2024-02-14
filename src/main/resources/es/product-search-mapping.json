@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "name": {
+      "type": "text",
+      "analyzer": "nori"
+    },
+    "description": {
+      "type": "text",
+      "analyzer": "nori"
+    },
+    "price": {
+      "type": "double"
+    },
+    "productStatus": {
+      "type": "keyword"
+    },
+    "deliveryMethod": {
+      "type": "keyword"
+    },
+    "productCategory": {
+      "type": "keyword"
+    },
+    "transactionStatus": {
+      "type": "keyword"
+    }
+  }
+}

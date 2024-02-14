@@ -4,7 +4,7 @@ server:
 
 spring:
   profiles:
-    active: prod
+    active: dev
 
   servlet:
     multipart:
@@ -75,6 +75,8 @@ logging:
   level:
     org.springframework.web: INFO
     org.hibernate.SQL: INFO
-    org.springframework.security: DEBUG
+    org.springframework.security: INFO
+    org.elasticsearch.client: DEBUG
+    org.springframework.data.elasticsearch: DEBUG
     org.redisson: INFO
     com.amazonaws.util.EC2MetadataUtils: ERROR

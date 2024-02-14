@@ -28,10 +28,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
   private final ProductRepository productRepository;
+  private final StoreRepository storeRepository;
+
+  private final ProductSearchService productSearchService;
+
   private final FileStorageService fileStorageService;
   private final ImageUploadService imageUploadService;
-  private final StoreRepository storeRepository;
   private final ProductImageRepository productImageRepository;
+
 
   @Transactional
   public ProductDto create(String memberEmail, ProductCreateForm form) {
@@ -63,8 +67,9 @@ public class ProductService {
             ImageProperty.PRODUCT, newProduct.getId())
     );
 
-    // 상품 생성
+    // 상품 생성 + ES 인덱스 생성
     productRepository.save(newProduct);
+    productSearchService.indexProduct(newProduct);
     return ProductDto.from(newProduct);
   }
 
@@ -110,8 +115,9 @@ public class ProductService {
     product.setTransactionStatus(form.getTransactionStatus());
     product.setStore(store);
 
-    // 업데이트 상품 저장
+    // 업데이트 상품 저장 + ES 인덱스 저장
     productRepository.save(product);
+    productSearchService.indexProduct(product);
     return ProductDto.from(product);
   }
 
@@ -137,6 +143,7 @@ public class ProductService {
 
     // 상품 삭제
     productRepository.deleteById(productId);
+    productSearchService.deleteProductIndex(product);
   }
 
   @Transactional(readOnly = true)

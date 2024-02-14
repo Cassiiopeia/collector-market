@@ -1,38 +1,71 @@
-version: '1.8'
+version: '1.0'
 services:
   collector-market-app:
     build:
       context: .
       dockerfile: docker/api/Dockerfile
     container_name: collector-market-app
-#    env_file: ../config/dev.env
-    env_file: config/prod.env
+    env_file: config/dev.env # 개발
+#    env_file: config/prod.env # 정식배포
 #    env_file: ../config/config.env
     ports:
       - "8085:8080"
     depends_on:
       - redis
       - elasticsearch
+    networks:
+      - market
 
   redis:
     image: redis:latest
-    container_name: cm-redis
+    container_name: redis
+    command: redis-server --bind 0.0.0.0
     ports:
       - "6379:6379"
+    networks:
+      - market
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.1
-    container_name: cm-elasticsearch
+    build:
+      context: .
+      dockerfile: docker/elastic/Dockerfile
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.5
+    container_name: elasticsearch
     environment:
-      - "discovery.type=single-node"
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=false
     ports:
       - "9200:9200"
       - "9300:9300"
+    networks:
+      - market
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.17.5
+    environment:
+      ELASTICSERCH_UTL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - market
 
   nginx:
     image: nginx:latest
-    container_name: cm-nginx
+    container_name: nginx
     ports:
       - "85:80"
     volumes:
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - collector-market-app
+    networks:
+      - market
+
+networks:
+  market:
+    driver: bridge
