@@ -58,6 +58,10 @@ dependencies {
     // elastic search
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
+    // apache solr
+    implementation 'org.springframework.data:spring-data-solr:4.3.15'
+    implementation 'org.apache.solr:solr-solrj'
+    implementation 'org.springframework:spring-context'
 
     // aws s3
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: '2.2.6.RELEASE'

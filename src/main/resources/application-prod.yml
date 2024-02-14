@@ -3,7 +3,11 @@ spring:
     redis:
       host: 220.85.169.165
       port: 6379
+    solr:
+      host: cm-solr
+      port: 8983
+      core: product
 
-elasticsearch:
-  host: 220.85.169.165
-  port: 9200
+#elasticsearch:
+#  host: 220.85.169.165
+#  port: 9200

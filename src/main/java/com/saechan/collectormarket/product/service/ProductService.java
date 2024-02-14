@@ -16,9 +16,11 @@ import com.saechan.collectormarket.product.exception.ProductException;
 import com.saechan.collectormarket.product.model.entity.Product;
 import com.saechan.collectormarket.product.model.repository.ProductImageRepository;
 import com.saechan.collectormarket.product.model.repository.ProductRepository;
+import com.saechan.collectormarket.product.model.repository.ProductSearchRepository;
 import com.saechan.collectormarket.store.exception.StoreException;
 import com.saechan.collectormarket.store.model.entity.Store;
 import com.saechan.collectormarket.store.model.repository.StoreRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +30,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductService {
 
   private final ProductRepository productRepository;
+
+  private final ProductSearchRepository productSearchRepository;
+
+  private final StoreRepository storeRepository;
+
   private final FileStorageService fileStorageService;
   private final ImageUploadService imageUploadService;
-  private final StoreRepository storeRepository;
   private final ProductImageRepository productImageRepository;
 
   @Transactional
@@ -150,5 +156,9 @@ public class ProductService {
 
     return ProductDto.from(product);
   }
+
+//  public List<ProductDto> list(String memberEmail) {
+//
+//  }
 }
 

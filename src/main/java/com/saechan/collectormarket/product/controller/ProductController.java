@@ -5,6 +5,7 @@ import com.saechan.collectormarket.product.dto.request.ProductUpdateForm;
 import com.saechan.collectormarket.product.dto.response.ProductDto;
 import com.saechan.collectormarket.product.service.ProductService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -61,4 +62,14 @@ public class ProductController {
     ProductDto productDto = productService.view(memberEmail, id);
     return ResponseEntity.ok(productDto);
   }
+
+//  @GetMapping("/list")
+//  public ResponseEntity<List<ProductDto>> listProduct(
+//      Authentication authentication
+//  ){
+//    String memberEmail = authentication.getName();
+//    List<ProductDto> productDtos = productService.list(memberEmail);
+//    return ResponseEntity.ok(productDtos);
+//  }
+
 }

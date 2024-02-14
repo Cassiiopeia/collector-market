@@ -38,3 +38,6 @@ out/
 
 ### secuirty
 /config
+
+### solr
+/solr-data/*
