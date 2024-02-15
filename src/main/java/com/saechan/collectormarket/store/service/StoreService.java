@@ -8,6 +8,7 @@ import com.saechan.collectormarket.member.model.entity.Member;
 import com.saechan.collectormarket.member.service.MemberUtils;
 import com.saechan.collectormarket.store.dto.request.StoreUpdateForm;
 import com.saechan.collectormarket.store.dto.response.StoreDto;
+import com.saechan.collectormarket.store.dto.response.StoreSearchDto;
 import com.saechan.collectormarket.store.exception.StoreException;
 import com.saechan.collectormarket.store.model.entity.Store;
 import com.saechan.collectormarket.store.model.repository.StoreRepository;
@@ -25,6 +26,7 @@ public class StoreService {
 
   private final ImageUploadService imageUploadService;
 
+  // 상점 생성 (회원생성시 자동생성)
   public Store createStore(Member member) {
 
     Store store = Store.builder()
@@ -43,6 +45,7 @@ public class StoreService {
     return storeRepository.save(store);
   }
 
+  // 자신의 상점 수정
   public StoreDto update(String memberEmail, StoreUpdateForm form) {
     // 회원 검증
     Member member = MemberUtils.verifyMemberFromEmail(memberEmail);
@@ -60,7 +63,8 @@ public class StoreService {
     // Form 이미지 파일 존재시
     if (!form.getImage().isEmpty()) {
       // 이미지 S3 업로드 -> 상점 업데이트
-      store.setImageUrl(imageUploadService.uploadStoreImage(form.getImage(), ImageProperty.STORE, store.getId()));
+      store.setImageUrl(imageUploadService.uploadStoreImage(form.getImage(),
+          ImageProperty.STORE, store.getId()));
     }
 
     // 상점 업데이트
@@ -71,13 +75,20 @@ public class StoreService {
     return StoreDto.from(storeRepository.save(store));
   }
 
-  public StoreDto getProfile(String memberEmail) {
-    // 회원 검증
-    Member member = MemberUtils.verifyMemberFromEmail(memberEmail);
-
+  // 상점 상세 보기
+  public StoreDto getProfile(Long storeId) {
     // 상점 검증
-    return StoreDto.from(
-        storeRepository.findById(member.getStore().getId())
-            .orElseThrow(() -> new StoreException(ErrorCode.STORE_NOT_FOUND)));
+    Store store = storeRepository.findById(storeId)
+        .orElseThrow(() -> new StoreException(ErrorCode.STORE_NOT_FOUND));
+    return StoreDto.from(store);
+  }
+
+  // 상점 이름 검색
+  public StoreSearchDto getStoreByName(String storeName) {
+    // 상점 검증
+    return StoreSearchDto.from(
+        storeRepository.findByName(storeName)
+            .orElseThrow(() -> new StoreException(ErrorCode.STORE_NOT_FOUND))
+    );
   }
 }

@@ -10,8 +10,10 @@ import com.saechan.collectormarket.global.s3.type.ImageProperty;
 import com.saechan.collectormarket.member.model.entity.Member;
 import com.saechan.collectormarket.member.service.MemberUtils;
 import com.saechan.collectormarket.product.dto.request.ProductCreateForm;
+import com.saechan.collectormarket.product.dto.request.ProductSearchForm;
 import com.saechan.collectormarket.product.dto.request.ProductUpdateForm;
 import com.saechan.collectormarket.product.dto.response.ProductDto;
+import com.saechan.collectormarket.product.dto.response.ProductSearchDto;
 import com.saechan.collectormarket.product.exception.ProductException;
 import com.saechan.collectormarket.product.model.entity.Product;
 import com.saechan.collectormarket.product.model.repository.ProductImageRepository;
@@ -20,6 +22,8 @@ import com.saechan.collectormarket.store.exception.StoreException;
 import com.saechan.collectormarket.store.model.entity.Store;
 import com.saechan.collectormarket.store.model.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,7 +122,7 @@ public class ProductService {
   @Transactional
   public void delete(String memberEmail, Long productId){
     // 회원 검증
-    Member member = MemberUtils.verifyMemberFromEmail(memberEmail);
+    MemberUtils.verifyMemberFromEmail(memberEmail);
 
     // 상품 검증
     Product product = productRepository.findById(productId)
@@ -139,16 +143,26 @@ public class ProductService {
     productRepository.deleteById(productId);
   }
 
+  // 상품 상세 정보 보기
   @Transactional(readOnly = true)
-  public ProductDto view(String memberEmail, long id) {
-    // 회원 검증
-    Member member = MemberUtils.verifyMemberFromEmail(memberEmail);
-
+  public ProductDto view(long id) {
     // 상품 검증
     Product product = productRepository.findById(id)
         .orElseThrow(() -> new ProductException(ErrorCode.PRODUCT_NOT_FOUND));
 
     return ProductDto.from(product);
   }
+
+
+  // 상품 검색
+  @Transactional(readOnly = true)
+  public Page<ProductSearchDto> search(ProductSearchForm form, int page, int size) {
+    PageRequest pageRequest = PageRequest.of(page, size);
+    Page<Product> productPage = productRepository.findByNameWithFiltering(
+        form.getName(), form.getMinPrice(), form.getMaxPrice(), form.getProductStatus(),
+        form.getProductCategory(), form.getTransactionStatus(), pageRequest);
+    return productPage.map(product -> ProductSearchDto.from(product));
+  }
 }
+
 

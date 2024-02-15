@@ -16,11 +16,13 @@ import lombok.Setter;
 @Builder
 public class StoreDto {
 
+  private Long id;
+
   private String name;
 
   private String description;
 
-  private String image;
+  private String imageUrl;
 
   private LocalDateTime openDt;
 
@@ -36,9 +38,10 @@ public class StoreDto {
 
   public static StoreDto from(Store store) {
     return StoreDto.builder()
+        .id(store.getId())
         .name(store.getName())
         .description(store.getDescription())
-        .image(store.getImageUrl())
+        .imageUrl(store.getImageUrl())
         .openDt(store.getOpenDt())
         .productIds(store.getProducts().stream()
             .map(Product::getId)
