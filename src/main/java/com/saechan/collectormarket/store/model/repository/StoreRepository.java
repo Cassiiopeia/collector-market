@@ -10,4 +10,6 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
 
   @Override
   Optional<Store> findById(Long storeId);
+
+  Optional<Store> findByName(String storeName);
 }

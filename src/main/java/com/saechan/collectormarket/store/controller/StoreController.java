@@ -2,6 +2,7 @@ package com.saechan.collectormarket.store.controller;
 
 import com.saechan.collectormarket.store.dto.request.StoreUpdateForm;
 import com.saechan.collectormarket.store.dto.response.StoreDto;
+import com.saechan.collectormarket.store.dto.response.StoreSearchDto;
 import com.saechan.collectormarket.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class StoreController {
   private final StoreService storeService;
 
+  // 자신의 상점 업데이트
   @PutMapping("/update")
-  public ResponseEntity<StoreDto> update(
+  public ResponseEntity<StoreDto> storeUpdate(
       Authentication authentication,
       @ModelAttribute StoreUpdateForm form
   ){
@@ -31,13 +33,24 @@ public class StoreController {
     return ResponseEntity.ok(storeDto);
   }
 
+  // 상점 상세보기
   @GetMapping("/profile")
-  public ResponseEntity<StoreDto> profile(
-      Authentication authentication
+  public ResponseEntity<StoreDto> storeProfile(
+      Authentication authentication,
+      @RequestParam Long storeId
   ){
-    String memberEmail = authentication.getName();
-    StoreDto storeDto = storeService.getProfile(memberEmail);
+    StoreDto storeDto = storeService.getProfile(storeId);
     return ResponseEntity.ok(storeDto);
+  }
+
+  // 상점 검색
+  @GetMapping("/search")
+  public ResponseEntity<StoreSearchDto> searchStoreByName(
+      Authentication authentication,
+      @RequestParam String storeName
+  ){
+    StoreSearchDto storeSearchDto = storeService.getStoreByName(storeName);
+    return ResponseEntity.ok(storeSearchDto);
   }
 
 }
